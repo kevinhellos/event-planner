@@ -13,15 +13,16 @@
 
     <div class="container mt-5">
         <h5>
-            <i class="fas fa-clipboard-list text-primary mr-2"></i> 
+            <i class="fas fa-clipboard-list text-primary mr-2"></i>
             Event Itinerary
             <a class="text-primary float-right" ng-click="getEventItems()">
                 <i class="fas fa-arrows-rotate"></i>
             </a>
         </h5>
-        
 
-        <div class="card mt-3 p-2" ng-repeat="item in eventItems" ng-if="item[4] =='Published' ">
+
+        <div class="card mt-3 p-2" ng-repeat="item in eventItems"
+            ng-if="item[4] =='Published' ">
             <div class="card-body">
                 <h5 class="font-weight-bold text-primary">{{item[0]}}</h5>
                 <small>{{item[1]}}</small><br>
@@ -30,6 +31,7 @@
             </div>
         </div>
 
+        <!-- Loader -->
         <div class="card cbs mt-3 p-0 placeholder" ng-if="cardLoader == true">
             <div class="card-body animated-background">
             </div>
@@ -46,13 +48,13 @@
         </div>
 
         <div class="card mt-3 p-2" ng-if="cardLoader == false && eventItems=='' " ng-cloak>
-            <div class="card-body">
-                <h5 class="font-weight-bold">
+            <div class="card-body text-center">
+                <h2 class="font-weight-bold text-secondary">
                     <i class="far fa-folder-open"></i>
-                    No items
-                </h5>
+                </h2>
                 <small>
-                    There is no items to view. Please check back at a later timing.
+                    There is no items to view. <br>
+                    Please check back at a later timing.
                 </small>
             </div>
         </div>
@@ -65,7 +67,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 
     <script>
-        var apiUrl = "";
+        var apiUrl = "https://script.google.com/macros/s/AKfycbyVdN-H_oioqCMzU6AFbX6wqH0HZuFl6gNGoCAoCVVBSj0RDYeCM3oPypRgKpGshi3z/exec";
         var app = angular.module("eventPlanner", []);
         app.controller("eventPlannerController", function ($scope, $http) {
 
@@ -119,11 +121,11 @@
             background-color: #f5f5f5 !important;
         }
 
-        .container{
+        .container {
             max-width: 600px;
         }
 
-        a{
+        a {
             cursor: pointer;
         }
 
@@ -132,10 +134,16 @@
             border-radius: .65rem !important;
             box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 3px;
             min-height: 150px !important;
+            cursor: pointer;
         }
-        .cbs{
+        .card:hover{
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        }
+
+        .cbs {
             box-shadow: none;
         }
+
         .card-body {
             display: block !important;
         }
