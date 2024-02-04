@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Itinerary</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body class="bg-light" ng-app="eventPlanner" ng-controller="eventPlannerController" ng-cloak>
+
+    <div class="container mt-5">
+        <h5>
+            <i class="fas fa-clipboard-list text-primary mr-2"></i> 
+            Event Itinerary
+            <a class="text-primary float-right" ng-click="getEventItems()">
+                <i class="fas fa-arrows-rotate"></i>
+            </a>
+        </h5>
+        
+
+        <div class="card mt-3 p-2" ng-repeat="item in eventItems" ng-if="item[4] =='Published' ">
+            <div class="card-body">
+                <h5 class="font-weight-bold text-primary">{{item[0]}}</h5>
+                <small>{{item[1]}}</small><br>
+                <small><i class="far fa-clock text-primary mr-2"></i>{{item[2]}}</small><br>
+                <small><i class="fas fa-location-dot text-primary mr-2"></i>{{item[3]}}</small><br>
+            </div>
+        </div>
+
+        <div class="card cbs mt-3 p-0 placeholder" ng-if="cardLoader == true">
+            <div class="card-body animated-background">
+            </div>
+        </div>
+
+        <div class="card cbs mt-3 p-0 placeholder" ng-if="cardLoader == true">
+            <div class="card-body animated-background">
+            </div>
+        </div>
+
+        <div class="card cbs mt-3 p-0 placeholder" ng-if="cardLoader == true">
+            <div class="card-body animated-background">
+            </div>
+        </div>
+
+        <div class="card mt-3 p-2" ng-if="cardLoader == false && eventItems=='' " ng-cloak>
+            <div class="card-body">
+                <h5 class="font-weight-bold">
+                    <i class="far fa-folder-open"></i>
+                    No items
+                </h5>
+                <small>
+                    There is no items to view. Please check back at a later timing.
+                </small>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <script>
+        var apiUrl = "https://script.google.com/macros/s/AKfycbyVdN-H_oioqCMzU6AFbX6wqH0HZuFl6gNGoCAoCVVBSj0RDYeCM3oPypRgKpGshi3z/exec";
+        var app = angular.module("eventPlanner", []);
+        app.controller("eventPlannerController", function ($scope, $http) {
+
+            $scope.eventItems = [];
+            $scope.getEventItems = function () {
+
+                $scope.eventItems = [];
+                $scope.cardLoader = true;
+
+                document.title = "Loading...";
+                $http.get(apiUrl)
+                    .then(function (response) {
+                        $scope.eventItems = response.data;
+                        // console.log(response.data);
+                        document.title = "Event Itinerary";
+                        $scope.cardLoader = false;
+                    });
+            }
+            $scope.getEventItems();
+
+        });
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+
+        html {
+            scroll-behavior: smooth !important;
+        }
+
+        :root {
+            --primary: #3A71CA;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif !important;
+            overflow-x: hidden !important;
+            letter-spacing: .3px !important;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #2b373f !important;
+        }
+
+        .bg-light {
+            background-color: #f5f5f5 !important;
+        }
+
+        .container{
+            max-width: 600px;
+        }
+
+        a{
+            cursor: pointer;
+        }
+
+        .card {
+            border: none;
+            border-radius: .65rem !important;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 3px;
+            min-height: 150px !important;
+        }
+        .cbs{
+            box-shadow: none;
+        }
+        .card-body {
+            display: block !important;
+        }
+
+        .text-primary {
+            color: var(--primary) !important;
+        }
+
+        .btn-primary {
+            box-shadow: none !important;
+            background-color: var(--primary) !important;
+        }
+
+        .bg-primary {
+            background-color: var(--primary) !important;
+        }
+
+        .placeholder {
+            margin: 0 auto;
+            /* max-width: 400px; */
+            /* min-height: 300px; */
+            height: 155px !important;
+            background-color: #eee;
+            border-radius: 15px !important;
+            margin-bottom: 25px;
+        }
+
+        @keyframes placeHolderShimmer {
+            0% {
+                background-position: -468px 0
+            }
+
+            100% {
+                background-position: 468px 0
+            }
+        }
+
+        .animated-background {
+            animation-duration: 1.25s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: infinite;
+            animation-name: placeHolderShimmer;
+            animation-timing-function: linear;
+            background: darkgray;
+            background: linear-gradient(to right, #eeeeee 10%, #dddddd 18%, #eeeeee 33%);
+            background-size: 800px 104px;
+            height: 300px;
+            position: relative;
+            border-radius: .65rem !important;
+            /* border-radius: 15px !important; */
+        }
+    </style>
+</body>
+
+</html>
